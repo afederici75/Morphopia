@@ -3,10 +3,517 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Morphopia</title>
+  <title>Morphopia — A Space for Interpersonal Transformation</title>
+  <meta name="description" content="Morphopia is an interactive altar for unmediated listening between strangers. Open playa, Black Rock City 2027.">
+  <meta property="og:title" content="Morphopia">
+  <meta property="og:description" content="An interactive altar for unmediated listening between strangers.">
+  <meta property="og:image" content="img/hero-night.webp">
+  <style>
+    :root {
+      --bg: #0b0908;
+      --bg2: #14100f;
+      --text: #e9e3da;
+      --muted: #9b928a;
+      --maroon: #6B1E23;
+      --maroon-hi: #b0343c;
+      --gold: #E8A317;
+      --line: rgba(232, 227, 218, .12);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font: 17px/1.7 "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: var(--gold); }
+    .serif { font-family: Georgia, "Times New Roman", serif; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding-inline: 24px; }
+    .narrow { max-width: 720px; }
+
+    /* nav */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 14px 24px; background: linear-gradient(rgba(11,9,8,.85), rgba(11,9,8,0));
+      backdrop-filter: blur(6px);
+    }
+    nav .brand { letter-spacing: .3em; font-size: 13px; text-transform: uppercase; text-decoration: none; color: var(--text); }
+    nav .links { display: flex; gap: 22px; align-items: center; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+    nav .links a { color: var(--muted); text-decoration: none; }
+    nav .links a:hover { color: var(--text); }
+    @media (max-width: 720px) { nav .links a.hide-sm { display: none; } }
+    .toggle {
+      display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px;
+      background: rgba(0,0,0,.4);
+    }
+    .toggle button {
+      font: inherit; font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+      border: 0; background: none; color: var(--muted); padding: 5px 14px; border-radius: 999px; cursor: pointer;
+    }
+    .toggle button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+
+    /* hero */
+    .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero .bg { position: absolute; inset: 0; }
+    .hero .bg img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: opacity .8s; }
+    .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 4%, rgba(11,9,8,.55) 45%, rgba(11,9,8,.2)); }
+    .hero .wrap { position: relative; z-index: 1; padding-bottom: 72px; }
+    .hero h1 {
+      font-family: Georgia, serif; font-weight: 400; margin: 0;
+      font-size: clamp(48px, 11vw, 132px); line-height: 1; letter-spacing: .06em;
+    }
+    .hero h1 .m { color: var(--maroon-hi); }
+    .hero h1 .o { color: var(--gold); }
+    .hero .tag { font-size: clamp(18px, 2.4vw, 26px); max-width: 640px; margin: 20px 0 8px; font-family: Georgia, serif; font-style: italic; }
+    .hero .meta { color: var(--muted); font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+
+    /* sections */
+    section { padding-block: 110px; }
+    .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: .28em; text-transform: uppercase; margin: 0 0 18px; }
+    h2 { font-family: Georgia, serif; font-weight: 400; font-size: clamp(30px, 4.5vw, 52px); line-height: 1.15; margin: 0 0 28px; }
+    h3 { font-family: Georgia, serif; font-weight: 400; font-size: 24px; margin: 0 0 6px; }
+    p { margin: 0 0 1.2em; }
+    .lead { font-size: clamp(20px, 2.4vw, 26px); line-height: 1.5; font-family: Georgia, serif; }
+    .muted { color: var(--muted); }
+    .alt { background: var(--bg2); border-block: 1px solid var(--line); }
+
+    /* two paths */
+    .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 48px; }
+    @media (max-width: 720px) { .paths { grid-template-columns: 1fr; } }
+    .path { padding: 32px; border-radius: 4px; }
+    .path.morph { background: var(--maroon); color: #f3d9a4; }
+    .path.opia { background: var(--gold); color: #4a1317; }
+    .path h3 { font-size: 34px; }
+    .path .role { font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .8; }
+    .path p { margin: 14px 0 0; }
+
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 56px; }
+    .facts div { background: var(--bg); padding: 24px; }
+    .facts b { display: block; font-family: Georgia, serif; font-weight: 400; font-size: 32px; color: var(--gold); line-height: 1.1; }
+    .facts span { font-size: 13px; color: var(--muted); letter-spacing: .06em; }
+
+    /* walkthrough */
+    .chapter { margin-bottom: 40px; }
+    .chapter p { color: var(--muted); max-width: 640px; }
+    figure { margin: 0 0 88px; }
+    figure .frame { position: relative; background: #000; border-radius: 4px; overflow: hidden; cursor: pointer; }
+    figure .frame img { width: 100%; height: auto; }
+    figure .frame img + img { position: absolute; inset: 0; height: 100%; object-fit: cover; transition: opacity .6s; }
+    body.day .frame img.n, body:not(.day) .frame img.d { opacity: 0; }
+    body.day .frame img.d, body:not(.day) .frame img.n { opacity: 1; }
+    figure.square .frame { max-width: 640px; margin-inline: auto; }
+    figcaption { margin-top: 16px; max-width: 760px; }
+    figcaption h3 { font-size: 22px; }
+    figcaption p { color: var(--muted); font-size: 15px; margin: 0; line-height: 1.6; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 720px) { .pair { grid-template-columns: 1fr; } }
+    figure.drawing .frame { background: #fff; cursor: zoom-in; }
+    figure.drawing .frame.dark { background: #000; }
+    .hint { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 10px 0 0; }
+
+    /* words */
+    .signs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin: 40px 0 72px; }
+    .sign { border: 1px solid var(--line); padding: 28px; border-radius: 4px; background: var(--bg); }
+    .sign .k { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .sign h3 { font-size: 22px; margin-bottom: 12px; }
+    .sign p, .sign li { font-size: 15px; color: #cfc8be; }
+    .sign ul { margin: 0; padding-left: 18px; }
+    .swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+    @media (max-width: 720px) { .swatches { grid-template-columns: 1fr; } }
+    .sw { padding: 24px; border-radius: 4px; font-size: 15px; }
+    .sw b { font-family: Georgia, serif; font-size: 22px; font-weight: 400; display: block; }
+    .sw.m { background: var(--maroon); color: var(--gold); }
+    .sw.g { background: var(--gold); color: var(--maroon); }
+
+    blockquote { margin: 0; font-family: Georgia, serif; font-style: italic; font-size: clamp(22px, 3vw, 34px); line-height: 1.4; }
+    blockquote .m { color: var(--maroon-hi); font-style: normal; }
+    blockquote .o { color: var(--gold); font-style: normal; }
+
+    footer { padding-block: 64px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; text-align: center; }
+    footer .big { font-family: Georgia, serif; letter-spacing: .3em; text-transform: uppercase; color: var(--text); font-size: 18px; margin-bottom: 8px; }
+
+    /* lightbox */
+    #lb { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.94); display: none; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+    #lb.open { display: flex; }
+    #lb img { max-height: 100%; max-width: 100%; background: #fff; }
+  </style>
 </head>
 <body>
-  <h1>Morphopia</h1>
-  <p>Welcome to Morphopia.</p>
+
+<nav>
+  <a class="brand" href="#top">Morphopia</a>
+  <div class="links">
+    <a class="hide-sm" href="#about">About</a>
+    <a class="hide-sm" href="#philosophy">Philosophy</a>
+    <a class="hide-sm" href="#walkthrough">Walkthrough</a>
+    <a class="hide-sm" href="#words">Words</a>
+    <a class="hide-sm" href="#build">Build</a>
+    <div class="toggle" role="group" aria-label="Lighting">
+      <button id="bDay" aria-pressed="false">Day</button>
+      <button id="bNight" aria-pressed="true">Night</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="bg">
+    <img class="d" src="img/hero-day.webp" alt="Morphopia at the open playa by day">
+    <img class="n" src="img/hero-night.webp" alt="Morphopia at the open playa at dusk">
+  </div>
+  <div class="wrap">
+    <h1><span class="m">Morph</span><span class="o">opia</span></h1>
+    <p class="tag">An interactive altar for unmediated listening between strangers.</p>
+    <div class="meta">Open playa · Black Rock City 2027</div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap narrow">
+    <p class="lead">Morphopia is an interactive relational altar designed for Black Rock City residents. Grounded in Victor Turner’s theory of liminality, Martin Buber’s I-Thou dyadic reciprocity, and Thich Nhat Hanh’s mindful communication, the installation guides participants out of social performance and into unconditioned, authentic presence.</p>
+    <p>Set beneath a minimalist overhead shade canopy in the open playa, the experiential architecture centers on a raised, yin-yang contoured dais (~&nbsp;2&nbsp;ft. high) flanked by two circumambulatory approach paths. Before entering, participants select one of two complementary roles, each guided by three inscribed somatic stations:</p>
+  </div>
+
+  <div class="wrap">
+    <div class="paths">
+      <div class="path morph">
+        <div class="role">Harmonizer / Responder</div>
+        <h3>The Morph Path</h3>
+        <p>Prepares the listener through the suspension of epistemic judgment, teleological detachment, and receptive benevolence, dismantling the ego’s urge to fix or evaluate.</p>
+      </div>
+      <div class="path opia">
+        <div class="role">Speaker / Questioner</div>
+        <h3>The Opia Path</h3>
+        <p>Guides the inquirer through cathartic release, endogenous introspection, and radical questioning to distill an unspoken tension into a single, essential truth.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap narrow" style="margin-top:56px">
+    <p>The paths converge at the central dais, where the pair sits face-to-face at a personal proxemic distance (3 to 4 feet). Guided by inscribed protocols, participants share sustained eye contact and intentional breaths before engaging in an unmediated exchange. Perimeter thresholds and witness guidelines establish a reverent container, prohibiting photography, bright white light, and external interruption.</p>
+    <p>Designed to be interactive both day and night, it is structurally engineered to withstand Playa grade wind gusts. Built under a dark shade canopy, secured with heavy-duty 18-inch playa lag anchors, it is constructed with 2x6 framing and 3/4-inch CNC-milled plywood. Recessed warm LEDs powered by a solar / battery array provide gentle nocturnal illumination without glare. Custom flat-pack components will be pre-fabricated in Philadelphia and staged in Reno alongside locally sourced dimensional lumber. Comprehensive Leave No Trace protocols, including secondary battery containment, and a magnetic grid sweep will ensure zero environmental impact.</p>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><b>15 ft</b><span>ten-sided ring</span></div>
+      <div><b>2 paths</b><span>Morph and Opia, meeting at one dais</span></div>
+      <div><b>3–4 ft</b><span>between the pair on the dais</span></div>
+      <div><b>≈ 42 × 47 ft</b><span>footprint with witness perimeter</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="philosophy">
+  <div class="wrap narrow">
+    <p class="eyebrow">Philosophy</p>
+    <h2>A dais upon which speech can change reality</h2>
+    <p class="lead">To create a space primed for true connection. We believe deconstructing barriers and priming vulnerability is essential to invoke transformational growth.</p>
+    <p>The default world forces us to build masks, the defenses necessary to keep the heart safe and the shocks of interpersonal friction from overwhelming us. These barriers can prevent genuine connection, and can in the right setting be dismantled for honest, active, open communication to occur.</p>
+    <p>Morphopia is designed to dissolve these barriers and offer a chance for vulnerable communication and potent transformation. Participants, guided by thoughtful physical design, walk a path intended to aid in dismantling assumptions and boundaries, and promote radical self expression.</p>
+    <p>This artwork is the container and setting for connection. We will spark hundreds of chances for bonds to form and weights lifted away, whether between strangers or lifelong friends. A space to turn immediacy into real change.</p>
+    <p class="muted">Drawing from Victor Turner’s framework of liminality and Martin Buber’s philosophy of the I-Thou dyadic exchange, and influenced by Thich Nhat Hanh’s mindful listening and mindful talking, the installation guides participants away from social performance and into authentic presence. It directly aligns with the core ethos of Burning Man by prioritizing meaningful participant interaction, emotional healing, and unmediated human connection over passive observation.</p>
+  </div>
+</section>
+
+<section id="walkthrough">
+  <div class="wrap">
+    <p class="eyebrow">Visual walkthrough</p>
+    <h2>Walk the piece</h2>
+    <p class="muted" style="max-width:640px">Renders from the 3D design model (v5). Use the Day / Night switch above, or click any render to flip between them.</p>
+    <div style="height:56px"></div>
+
+    <div class="chapter"><h3>The whole</h3></div>
+
+    <figure class="square">
+      <div class="frame" title="Click to switch day / night">
+        <img class="d" src="img/symmetry-day.webp" alt="Morphopia from straight above, day" loading="lazy">
+        <img class="n" src="img/symmetry-night.webp" alt="Morphopia from straight above, night" loading="lazy">
+      </div>
+      <figcaption><h3>Straight down: the symmetry</h3><p>Morph (Tibetan maroon) and Opia (gold) wrap the yin-yang dais; eight scrolls stand at the far corner of each step.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/above-day.webp" alt="Morphopia from above, day" loading="lazy">
+        <img class="n" src="img/above-night.webp" alt="Morphopia from above, night" loading="lazy">
+      </div>
+      <figcaption><h3>From above</h3><p>Canopy hidden. Outer wall 30″ (54″ at station 4), inner wall 54″; each step's scroll rises above the outer wall.</p></figcaption>
+    </figure>
+
+    <div class="chapter"><h3>The entrance</h3></div>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/sign-day.webp" alt="The Morphopia sign at the main entrance, day" loading="lazy">
+        <img class="n" src="img/sign-night.webp" alt="The Morphopia sign at the main entrance, night" loading="lazy">
+      </div>
+      <figcaption><h3>The sign at the main entrance</h3><p>A 4 ft drum hung by four corner turnbuckles in a 9′-10″ 4×4 portal; black and white like the dais yin-yang.</p></figcaption>
+    </figure>
+
+    <figure class="square">
+      <div class="frame">
+        <img class="d" src="img/sign-face-day.webp" alt="The sign face, day" loading="lazy">
+        <img class="n" src="img/sign-face-night.webp" alt="The sign face, night" loading="lazy">
+      </div>
+      <figcaption><h3>The sign face</h3><p>Morph swirl white and lit from inside, solid black “m rph”; Opia black with “pia” and its dot cut through and lit white.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/sign-side-day.webp" alt="The sign from the side, day" loading="lazy">
+        <img class="n" src="img/sign-side-night.webp" alt="The sign from the side, night" loading="lazy">
+      </div>
+      <figcaption><h3>The sign from the side</h3><p>Natural birch rim, slotted and lit with cool white LEDs; the turnbuckles run from the rim to the portal corners.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/lane-day.webp" alt="Sign C and the guide ropes, day" loading="lazy">
+        <img class="n" src="img/lane-night.webp" alt="Sign C and the guide ropes, night" loading="lazy">
+      </div>
+      <figcaption><h3>Choosing a path</h3><p>A shared lane from Sign C, then red (Morph) and gold (Opia) rope lights on 6″ stakes, turning into each door's far jamb.</p></figcaption>
+    </figure>
+
+    <div class="chapter"><h3>The walls and the words</h3></div>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/morph-entrance-day.webp" alt="The Morph entrance, day" loading="lazy">
+        <img class="n" src="img/morph-entrance-night.webp" alt="The Morph entrance, night" loading="lazy">
+      </div>
+      <figcaption><h3>The Morph (listener) entrance</h3><p>The entry step names the path; scrolls and the inner-wall paintings rise above the 30″ outer wall.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/paintings-outside-day.webp" alt="Inner-wall paintings from outside, day" loading="lazy">
+        <img class="n" src="img/paintings-outside-night.webp" alt="Inner-wall paintings from outside, night" loading="lazy">
+      </div>
+      <figcaption><h3>The inner-wall paintings, from outside</h3><p>Five panels per path on the inner wall; the scrolls lean in toward the walkers along the outer wall.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/paintings-path-day.webp" alt="The paintings from the path, day" loading="lazy">
+        <img class="n" src="img/paintings-path-night.webp" alt="The paintings from the path, night" loading="lazy">
+      </div>
+      <figcaption><h3>The paintings, from the path</h3><p>Standing on M0: the first scroll at the step's far corner, the first panels beside you, the next title backlit ahead.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/scroll-m0-day.webp" alt="Scroll M0, day" loading="lazy">
+        <img class="n" src="img/scroll-m0-night.webp" alt="Scroll M0, night" loading="lazy">
+      </div>
+      <figcaption><h3>Scroll M0 · the first step</h3><p>20″ × 24″ fabric scroll on a top roller, wrapped round a bottom rail; red yin-yang seal. Top 5′6.5″ above the step, tilted back 12°.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/scroll-m2-day.webp" alt="Scroll M2, day" loading="lazy">
+        <img class="n" src="img/scroll-m2-night.webp" alt="Scroll M2, night" loading="lazy">
+      </div>
+      <figcaption><h3>Scroll M2 · reading on the path</h3><p>Each scroll repeats the words on its step, turned about 50° toward the walker coming up the path.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/scroll-back-day.webp" alt="Behind a scroll, day" loading="lazy">
+        <img class="n" src="img/scroll-back-night.webp" alt="Behind a scroll, night" loading="lazy">
+      </div>
+      <figcaption><h3>Behind a scroll</h3><p>A hardwood spine behind the canvas carries the top roller and the bottom rail; the back of the fabric is plain parchment.</p></figcaption>
+    </figure>
+
+    <div class="chapter"><h3>Witnesses and walkers</h3></div>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/perimeter-day.webp" alt="Walking the perimeter, day" loading="lazy">
+        <img class="n" src="img/perimeter-night.webp" alt="Walking the perimeter, night" loading="lazy">
+      </div>
+      <figcaption><h3>Walking the perimeter</h3><p>Witnesses outside the rope see the walkers, the scrolls, the paintings and the pair on the dais.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/station4-day.webp" alt="Station 4, day" loading="lazy">
+        <img class="n" src="img/station4-night.webp" alt="Station 4, night" loading="lazy">
+      </div>
+      <figcaption><h3>Station 4, beside the dais entrance</h3><p>The two station-4 panels rise to 54″ and carry the vortex of the cool currents, running across the storage hatch door.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/path-morph-day.webp" alt="On the Morph path, day" loading="lazy">
+        <img class="n" src="img/path-morph-night.webp" alt="On the Morph path, night" loading="lazy">
+      </div>
+      <figcaption><h3>On the path (Morph)</h3><p>Maroon treads and kickplates with gold words; titles cut through the kickplates and backlit in gold.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/steps-morph-day.webp" alt="Morph steps, day" loading="lazy">
+        <img class="n" src="img/steps-morph-night.webp" alt="Morph steps, night" loading="lazy">
+      </div>
+      <figcaption><h3>Morph steps · Tibetan maroon, gold words</h3><p>The maroon's clear topcoat glows deep red under the UV floods; the gold words stay readable day and night.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/steps-opia-day.webp" alt="Opia steps, day" loading="lazy">
+        <img class="n" src="img/steps-opia-night.webp" alt="Opia steps, night" loading="lazy">
+      </div>
+      <figcaption><h3>Opia steps · gold, maroon words</h3><p>The same system reversed for the speaker: fluorescent gold with maroon words, kickplate titles backlit in deep red.</p></figcaption>
+    </figure>
+
+    <figure>
+      <div class="frame">
+        <img class="d" src="img/dais-day.webp" alt="The dais, day" loading="lazy">
+        <img class="n" src="img/dais-night.webp" alt="The dais, night" loading="lazy">
+      </div>
+      <figcaption><h3>The dais</h3><p>Two seats on the yin-yang dots; the inner wall glows warm toward the pair.</p></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="alt" id="words">
+  <div class="wrap">
+    <p class="eyebrow">The words</p>
+    <h2>What the signs say</h2>
+    <p class="muted" style="max-width:640px">Signs A and B stand at the witness perimeter; Sign C splits the entry lane. The eight scrolls repeat the words on their steps.</p>
+
+    <div class="signs">
+      <div class="sign">
+        <div class="k">Sign A · Perimeter</div>
+        <h3>Entering a sanctuary of presence</h3>
+        <p>Morphopia is an intentional space for unmediated human exchange, vulnerability, and deep listening. Please enter with reverence. Lower your voice, extinguish white headlamps, and silence external sound systems.</p>
+      </div>
+      <div class="sign">
+        <div class="k">Sign B · Perimeter</div>
+        <h3>To our witnesses</h3>
+        <p>Your silent presence forms the protective boundary of this container. You are welcome to observe from outside the path perimeter.</p>
+        <ul><li>No flash photography or video</li><li>Keep a respectful buffer</li><li>Hold quiet space</li></ul>
+      </div>
+      <div class="sign">
+        <div class="k">Sign C · Entry lane</div>
+        <h3>← Morph | Opia →</h3>
+        <p><b>Left: Morph</b> — The Responder's Path<br>listen · hold space · offer presence</p>
+        <p><b>Right: Opia</b> — The Speaker's Path<br>release · feel inward · ask your truth</p>
+      </div>
+    </div>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/scrolls.webp" alt="The eight scrolls, M0 to M3 and O0 to O3" loading="lazy"></div>
+      <figcaption><h3>The scrolls · M0–M3 (top) and O0–O3 (bottom)</h3><p>Each scroll repeats its step's title and inscription in the Ananda Namaste letters, with the red yin-yang seal.</p></figcaption>
+    </figure>
+
+    <figure class="drawing" style="margin-bottom:0">
+      <div class="frame dark"><img src="img/words-of-light.webp" alt="Words of light: the two colours and the step inscriptions" loading="lazy"></div>
+      <figcaption><h3>Words of light · the colours and the step inscriptions</h3><p>Each path's words are painted in the other path's colour.</p></figcaption>
+      <div class="swatches">
+        <div class="sw m"><b>Tibetan maroon #6B1E23</b>Morph, the listener: spiritual discipline, wisdom, and active commitment.</div>
+        <div class="sw g"><b>Gold #E8A317</b>Opia, the speaker: renunciation, humility and the earth.</div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p class="eyebrow">The artistic vision</p>
+    <blockquote>Masculine and feminine energies mixing in balance: cool, steady currents on the outside of the ring; warm, billowing ribbons around the dais; <span class="m">maroon for the listener</span>, <span class="o">gold for the speaker</span>, and words of light underfoot leading each walker to the centre.</blockquote>
+  </div>
+  <div class="wrap" style="margin-top:72px">
+    <figure>
+      <div class="frame dark" style="background:#000"><img src="img/wisps-morph.webp" alt="Wall wisps at night, Morph" loading="lazy"></div>
+      <figcaption><h3>Wall wisps at night · Morph</h3><p>Outer wall from outside: the currents build from the entry to the station 4 vortex. Inner wall from the dais: warm ribbons.</p></figcaption>
+    </figure>
+    <figure style="margin-bottom:0">
+      <div class="frame dark" style="background:#000"><img src="img/wisps-opia.webp" alt="Wall wisps at night, Opia" loading="lazy"></div>
+      <figcaption><h3>Wall wisps at night · Opia</h3><p>Same language with its own currents: reads alike from a distance, different up close.</p></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="alt" id="build">
+  <div class="wrap">
+    <p class="eyebrow">How it's built</p>
+    <h2>Plans, sections and elevations</h2>
+    <p class="muted" style="max-width:640px">All taken from the 3D model (v5). Dimensions are design intent, not yet engineered. Click a drawing to enlarge.</p>
+    <div style="height:56px"></div>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/structure-plan.webp" alt="Structure plan" loading="lazy"></div>
+      <figcaption><h3>Structure plan</h3><p>Ten-sided ring, ten sections of 36°. Each path climbs in 6″ steps from +6″ at the entry to the +30″ dais. Outer wall 30″ (54″ at the two station-4 panels); inner and divider walls 54″. Scrolls at the far corner of each step.</p></figcaption>
+    </figure>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/site-plan.webp" alt="Site plan" loading="lazy"></div>
+      <figcaption><h3>Site plan</h3><p>Sign C splits the entry lane; red and gold guide ropes run 36″ off the wall and turn into each door's far jamb. A 20′ × 20′ shade sail with UV floods; witness perimeter with Signs A/B; the Morphopia sign on its 9′-10″ portal at the main entrance.</p></figcaption>
+    </figure>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/sign-portal.webp" alt="The sign portal and rigging" loading="lazy"></div>
+      <figcaption><h3>The Morphopia sign · portal and rigging</h3><p>4×4 DF posts and an 8′ header on steel bases with 18″ lags; ⅜″ turnbuckles at the four corners. White diffuser behind the Morph face, two reels of cool-white LEDs, black paint for the Opia side.</p></figcaption>
+    </figure>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/scroll-section.webp" alt="Scroll section" loading="lazy"></div>
+      <figcaption><h3>The scrolls · section</h3><p>A straight post rises from the outer wall, then tilts back 12°; the top of each scroll is 5′6.5″ above its step.</p></figcaption>
+    </figure>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/paintings-plan.webp" alt="Inner-wall paintings" loading="lazy"></div>
+      <figcaption><h3>The inner-wall paintings</h3><p>Five panels per path (divider face + M0–M3; Opia mirrors). The pieces close vertically to panel 3, then sideways on 4 and 5; the dots stay over their holes and finish just outside the swirls. Nothing ever overlaps.</p></figcaption>
+    </figure>
+
+    <figure class="drawing">
+      <div class="frame"><img src="img/ring-section.webp" alt="Section through the ring" loading="lazy"></div>
+      <figcaption><h3>Section through the ring</h3><p>30″ outer wall, 54″ inner wall: walkers, steps, scrolls and paintings are part of what witnesses see.</p></figcaption>
+    </figure>
+
+    <figure class="drawing" style="margin-bottom:0">
+      <div class="frame"><img src="img/wall-elevations.webp" alt="Wall elevations" loading="lazy"></div>
+      <figcaption><h3>Wall elevations</h3><p>Outer walls from outside (cool currents, the station-4 vortex and storage hatch, the scrolls above the wall) and the inner wall from the dais. ½″ ply skins on 2×4 framing; frosted diffuser and LED strips behind the cut-outs.</p></figcaption>
+    </figure>
+  </div>
+</section>
+
+<footer>
+  <div class="big">Morphopia</div>
+  <div>Black Rock City 2027 · Honoraria proposal · design model v5, October 2026</div>
+</footer>
+
+<div id="lb" aria-hidden="true"><img alt=""></div>
+
+<script>
+  var body = document.body, bDay = document.getElementById('bDay'), bNight = document.getElementById('bNight');
+  function setDay(day) {
+    body.classList.toggle('day', day);
+    bDay.setAttribute('aria-pressed', day);
+    bNight.setAttribute('aria-pressed', !day);
+    document.querySelectorAll('.hero .bg img').forEach(function (i) {
+      i.style.opacity = (i.classList.contains('d') === day) ? 1 : 0;
+    });
+  }
+  bDay.onclick = function () { setDay(true); };
+  bNight.onclick = function () { setDay(false); };
+  setDay(false);
+
+  // Click a render to flip day/night; click a drawing to enlarge.
+  var lb = document.getElementById('lb'), lbImg = lb.querySelector('img');
+  document.querySelectorAll('figure .frame').forEach(function (f) {
+    if (f.querySelector('img.d')) {
+      f.onclick = function () { setDay(!body.classList.contains('day')); };
+    } else {
+      f.onclick = function () { lbImg.src = f.querySelector('img').src; lb.classList.add('open'); };
+    }
+  });
+  lb.onclick = function () { lb.classList.remove('open'); };
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+</script>
 </body>
 </html>
