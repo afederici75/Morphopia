@@ -28,7 +28,8 @@
       -webkit-font-smoothing: antialiased;
     }
     img { display: block; max-width: 100%; }
-    a { color: var(--gold); }
+    a { color: var(--gold); text-decoration-color: rgba(232,163,23,.4); text-underline-offset: 3px; }
+    a:hover { text-decoration-color: var(--gold); }
     .serif { font-family: Georgia, "Times New Roman", serif; }
     .wrap { max-width: 1100px; margin: 0 auto; padding-inline: 24px; }
     .narrow { max-width: 720px; }
@@ -45,22 +46,13 @@
     nav .links a { color: var(--muted); text-decoration: none; }
     nav .links a:hover { color: var(--text); }
     @media (max-width: 720px) { nav .links a.hide-sm { display: none; } }
-    .toggle {
-      display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px;
-      background: rgba(0,0,0,.4);
-    }
-    .toggle button {
-      font: inherit; font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
-      border: 0; background: none; color: var(--muted); padding: 5px 14px; border-radius: 999px; cursor: pointer;
-    }
-    .toggle button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
 
     /* hero */
     .hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; }
     .hero .bg { position: absolute; inset: 0; }
     .hero .bg img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: opacity .8s; }
     .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 4%, rgba(11,9,8,.55) 45%, rgba(11,9,8,.2)); }
-    .hero .wrap { position: relative; z-index: 1; padding-bottom: 72px; }
+    .hero .wrap { position: relative; z-index: 1; padding-bottom: 120px; }
     .hero h1 {
       font-family: Georgia, serif; font-weight: 400; margin: 0;
       font-size: clamp(48px, 11vw, 132px); line-height: 1; letter-spacing: .06em;
@@ -69,6 +61,12 @@
     .hero h1 .o { color: var(--gold); }
     .hero .tag { font-size: clamp(18px, 2.4vw, 26px); max-width: 640px; margin: 20px 0 8px; font-family: Georgia, serif; font-style: italic; }
     .hero .meta { color: var(--muted); font-size: 13px; letter-spacing: .18em; text-transform: uppercase; }
+
+    .scroll { position: absolute; z-index: 1; left: 50%; bottom: 28px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-size: 12px; letter-spacing: .24em; text-transform: uppercase; opacity: .85; }
+    .scroll:hover { opacity: 1; }
+    .scroll i { width: 12px; height: 12px; border-right: 1.5px solid var(--gold); border-bottom: 1.5px solid var(--gold); transform: rotate(45deg); animation: bob 1.8s ease-in-out infinite; }
+    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(8px) rotate(45deg); } }
+    @media (prefers-reduced-motion: reduce) { .scroll i { animation: none; } }
 
     /* sections */
     section { padding-block: 110px; }
@@ -151,10 +149,6 @@
     <a class="hide-sm" href="#walkthrough">Walkthrough</a>
     <a class="hide-sm" href="#words">Words</a>
     <a class="hide-sm" href="#build">Build</a>
-    <div class="toggle" role="group" aria-label="Lighting">
-      <button id="bDay" aria-pressed="false">Day</button>
-      <button id="bNight" aria-pressed="true">Night</button>
-    </div>
   </div>
 </nav>
 
@@ -168,11 +162,12 @@
     <p class="tag">An interactive altar for unmediated listening between strangers.</p>
     <div class="meta">Open playa · Black Rock City 2027</div>
   </div>
+  <a class="scroll" href="#about" aria-label="Scroll down to explore the project"><span>Scroll to explore</span><i></i></a>
 </header>
 
 <section id="about">
   <div class="wrap narrow">
-    <p class="lead">Morphopia is an interactive relational altar designed for Black Rock City residents. Grounded in Victor Turner’s theory of liminality, Martin Buber’s I-Thou dyadic reciprocity, and Thich Nhat Hanh’s mindful communication, the installation guides participants out of social performance and into unconditioned, authentic presence.</p>
+    <p class="lead">Morphopia is an interactive relational altar designed for Black Rock City residents. Grounded in <a href="https://en.wikipedia.org/wiki/Victor_Turner" target="_blank" rel="noopener">Victor Turner</a>’s theory of <a href="https://en.wikipedia.org/wiki/Liminality" target="_blank" rel="noopener">liminality</a>, <a href="https://en.wikipedia.org/wiki/Martin_Buber" target="_blank" rel="noopener">Martin Buber</a>’s <a href="https://en.wikipedia.org/wiki/I_and_Thou" target="_blank" rel="noopener">I-Thou</a> dyadic reciprocity, and <a href="https://en.wikipedia.org/wiki/Th%C3%ADch_Nh%E1%BA%A5t_H%E1%BA%A1nh" target="_blank" rel="noopener">Thich Nhat Hanh</a>’s <a href="https://en.wikipedia.org/wiki/The_Art_of_Communicating" target="_blank" rel="noopener">mindful communication</a>, the installation guides participants out of social performance and into unconditioned, authentic presence.</p>
     <p>Set beneath a minimalist overhead shade canopy in the open playa, the experiential architecture centers on a raised, yin-yang contoured dais (~&nbsp;2&nbsp;ft. high) flanked by two circumambulatory approach paths. Before entering, participants select one of two complementary roles, each guided by three inscribed somatic stations:</p>
   </div>
 
@@ -214,7 +209,7 @@
     <p>The default world forces us to build masks, the defenses necessary to keep the heart safe and the shocks of interpersonal friction from overwhelming us. These barriers can prevent genuine connection, and can in the right setting be dismantled for honest, active, open communication to occur.</p>
     <p>Morphopia is designed to dissolve these barriers and offer a chance for vulnerable communication and potent transformation. Participants, guided by thoughtful physical design, walk a path intended to aid in dismantling assumptions and boundaries, and promote radical self expression.</p>
     <p>This artwork is the container and setting for connection. We will spark hundreds of chances for bonds to form and weights lifted away, whether between strangers or lifelong friends. A space to turn immediacy into real change.</p>
-    <p class="muted">Drawing from Victor Turner’s framework of liminality and Martin Buber’s philosophy of the I-Thou dyadic exchange, and influenced by Thich Nhat Hanh’s mindful listening and mindful talking, the installation guides participants away from social performance and into authentic presence. It directly aligns with the core ethos of Burning Man by prioritizing meaningful participant interaction, emotional healing, and unmediated human connection over passive observation.</p>
+    <p class="muted">Drawing from <a href="https://en.wikipedia.org/wiki/Victor_Turner" target="_blank" rel="noopener">Victor Turner</a>’s framework of <a href="https://en.wikipedia.org/wiki/Liminality" target="_blank" rel="noopener">liminality</a> and <a href="https://en.wikipedia.org/wiki/Martin_Buber" target="_blank" rel="noopener">Martin Buber</a>’s philosophy of the <a href="https://en.wikipedia.org/wiki/I_and_Thou" target="_blank" rel="noopener">I-Thou</a> dyadic exchange, and influenced by <a href="https://en.wikipedia.org/wiki/Th%C3%ADch_Nh%E1%BA%A5t_H%E1%BA%A1nh" target="_blank" rel="noopener">Thich Nhat Hanh</a>’s <a href="https://en.wikipedia.org/wiki/The_Art_of_Communicating" target="_blank" rel="noopener">mindful listening and mindful talking</a>, the installation guides participants away from social performance and into authentic presence. It directly aligns with the core ethos of Burning Man by prioritizing meaningful participant interaction, emotional healing, and unmediated human connection over passive observation.</p>
   </div>
 </section>
 
@@ -222,7 +217,7 @@
   <div class="wrap">
     <p class="eyebrow">Visual walkthrough</p>
     <h2>Walk the piece</h2>
-    <p class="muted" style="max-width:640px">Renders from the 3D design model (v5). Use the Day / Night switch above, or click any render to flip between them.</p>
+    <p class="muted" style="max-width:640px">Renders from the 3D design model (v5). Click any render to switch between day and night.</p>
     <div style="height:56px"></div>
 
     <div class="chapter"><h3>The whole</h3></div>
@@ -490,17 +485,13 @@
 <div id="lb" aria-hidden="true"><img alt=""></div>
 
 <script>
-  var body = document.body, bDay = document.getElementById('bDay'), bNight = document.getElementById('bNight');
+  var body = document.body;
   function setDay(day) {
     body.classList.toggle('day', day);
-    bDay.setAttribute('aria-pressed', day);
-    bNight.setAttribute('aria-pressed', !day);
     document.querySelectorAll('.hero .bg img').forEach(function (i) {
       i.style.opacity = (i.classList.contains('d') === day) ? 1 : 0;
     });
   }
-  bDay.onclick = function () { setDay(true); };
-  bNight.onclick = function () { setDay(false); };
   setDay(false);
 
   // Click a render to flip day/night; click a drawing to enlarge.
