@@ -68,6 +68,11 @@
     @keyframes bob { 0%, 100% { transform: translateY(0) rotate(45deg); } 50% { transform: translateY(8px) rotate(45deg); } }
     @media (prefers-reduced-motion: reduce) { .scroll i { animation: none; } }
 
+    .video { padding-block: 80px; }
+    .video h2 { margin-bottom: 24px; }
+    .player { position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); }
+    .player video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
     /* sections */
     section { padding-block: 110px; }
     .eyebrow { color: var(--gold); font-size: 12px; letter-spacing: .28em; text-transform: uppercase; margin: 0 0 18px; }
@@ -162,8 +167,16 @@
     <p class="tag">An interactive altar for unmediated listening.</p>
     <div class="meta">Open playa · Black Rock City 2027</div>
   </div>
-  <a class="scroll" href="#about" aria-label="Scroll down to explore the project"><span>Scroll to explore</span><i></i></a>
+  <a class="scroll" href="#night-video" aria-label="Scroll down to explore the project"><span>Scroll to explore</span><i></i></a>
 </header>
+
+<section class="video" id="night-video">
+  <div class="wrap">
+    <p class="eyebrow">Video</p>
+    <h2>Morphopia at night</h2>
+    <div class="player"><video controls preload="none" playsinline poster="vids/morphopia-night-poster.jpg" src="vids/morphopia-night.mp4" aria-label="Morphopia at night"></video></div>
+  </div>
+</section>
 
 <section id="about">
   <div class="wrap narrow">
@@ -474,6 +487,14 @@
       <div class="frame"><img src="img/wall-elevations.webp" alt="Wall elevations" loading="lazy"></div>
       <figcaption><h3>Wall elevations</h3><p>Outer walls from outside (cool currents, the station-4 vortex and storage hatch, the scrolls above the wall) and the inner wall from the dais. ½″ ply skins on 2×4 framing; frosted diffuser and LED strips behind the cut-outs.</p></figcaption>
     </figure>
+  </div>
+</section>
+
+<section class="video" id="day-video">
+  <div class="wrap">
+    <p class="eyebrow">Video</p>
+    <h2>Morphopia by day</h2>
+    <div class="player"><video controls preload="none" playsinline poster="vids/morphopia-day-poster.jpg" src="vids/morphopia-day.mp4" aria-label="Morphopia by day"></video></div>
   </div>
 </section>
 
