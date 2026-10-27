@@ -107,7 +107,7 @@
     figure .frame img + img { position: absolute; inset: 0; height: 100%; object-fit: cover; transition: opacity .6s; }
     body.day .frame img.n, body:not(.day) .frame img.d { opacity: 0; }
     body.day .frame img.d, body:not(.day) .frame img.n { opacity: 1; }
-    figure.square .frame { max-width: 640px; margin-inline: auto; }
+    figure.square { max-width: 640px; margin-inline: auto; }
     figcaption { margin-top: 16px; max-width: 760px; }
     figcaption h3 { font-size: 22px; }
     figcaption p { color: var(--muted); font-size: 15px; margin: 0; line-height: 1.6; }
@@ -519,6 +519,10 @@
   var lb = document.getElementById('lb'), lbImg = lb.querySelector('img');
   document.querySelectorAll('figure .frame').forEach(function (f) {
     if (f.querySelector('img.d')) {
+      var h = document.createElement('p');
+      h.className = 'hint';
+      h.textContent = 'Click the image to switch between day and night';
+      f.insertAdjacentElement('afterend', h);
       f.onclick = function () { setDay(!body.classList.contains('day')); };
     } else {
       f.onclick = function () { lbImg.src = f.querySelector('img').src; lb.classList.add('open'); };
